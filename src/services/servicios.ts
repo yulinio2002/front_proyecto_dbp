@@ -28,15 +28,23 @@ export interface HorarioReq {
 }
 
 export async function searchServicios(p: SearchParams): Promise<Servicio[]> {
-  const { data } = await axiosInstance.get<Servicio[]>('/servicios', { params: p });
+  const { data } = await axiosInstance.get<Servicio[]>('/api/servicios', {
+    params: p,
+  });
   return data;
 }
 
-export async function updateServicio(id: number, body: Partial<CreateServicioReq>): Promise<Servicio> {
-  const { data } = await axiosInstance.put<Servicio>(`/servicios/${id}`, body);
+export async function updateServicio(
+  id: number,
+  body: Partial<CreateServicioReq>,
+): Promise<Servicio> {
+  const { data } = await axiosInstance.put<Servicio>(`/api/servicios/${id}`, body);
   return data;
 }
 
-export async function setHorarios(servicioId: number, horarios: HorarioReq[]): Promise<void> {
-  await axiosInstance.post(`/servicios/${servicioId}/horarios`, horarios);
+export async function setHorarios(
+  servicioId: number,
+  horarios: HorarioReq[],
+): Promise<void> {
+  await axiosInstance.post(`/api/servicios/${servicioId}/horarios`, horarios);
 }

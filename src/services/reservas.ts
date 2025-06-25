@@ -15,37 +15,58 @@ export interface CreateReservaReq {
   servicioId: number;
 }
 
-export async function createReserva(clienteId: number, body: CreateReservaReq): Promise<Reserva> {
-  const { data } = await axiosInstance.post<Reserva>(`/clientes/${clienteId}/reservas`, body);
+export async function createReserva(
+  clienteId: number,
+  body: CreateReservaReq,
+): Promise<Reserva> {
+  const { data } = await axiosInstance.post<Reserva>(
+    `/api/clientes/${clienteId}/reservas`,
+    body,
+  );
   return data;
 }
 
-export async function cancelReserva(clienteId: number, reservaId: number): Promise<Reserva> {
-  const { data } = await axiosInstance.patch<Reserva>(`/clientes/${clienteId}/reservas/${reservaId}/cancelar`);
+export async function cancelReserva(
+  clienteId: number,
+  reservaId: number,
+): Promise<Reserva> {
+  const { data } = await axiosInstance.patch<Reserva>(
+    `/api/clientes/${clienteId}/reservas/${reservaId}/cancelar`,
+  );
   return data;
 }
 
 export async function acceptReserva(reservaId: number): Promise<Reserva> {
-  const { data } = await axiosInstance.patch<Reserva>(`/reservas/${reservaId}/aceptar`);
+  const { data } = await axiosInstance.patch<Reserva>(
+    `/api/reservas/${reservaId}/aceptar`,
+  );
   return data;
 }
 
 export async function completeReserva(reservaId: number): Promise<Reserva> {
-  const { data } = await axiosInstance.patch<Reserva>(`/reservas/${reservaId}/completar`);
+  const { data } = await axiosInstance.patch<Reserva>(
+    `/api/reservas/${reservaId}/completar`,
+  );
   return data;
 }
 
 export async function getClienteReservas(clienteId: number): Promise<Reserva[]> {
-  const { data } = await axiosInstance.get<Reserva[]>(`/clientes/${clienteId}/reservas`);
+  const { data } = await axiosInstance.get<Reserva[]>(
+    `/api/clientes/${clienteId}/reservas`,
+  );
   return data;
 }
 
-export async function getProveedorReservas(proveedorId: number): Promise<Reserva[]> {
-  const { data } = await axiosInstance.get<Reserva[]>(`/proveedores/${proveedorId}/reservas`);
+export async function getProveedorReservas(
+  proveedorId: number,
+): Promise<Reserva[]> {
+  const { data } = await axiosInstance.get<Reserva[]>(
+    `/api/proveedores/${proveedorId}/reservas`,
+  );
   return data;
 }
 
 export async function getAllReservas(): Promise<Reserva[]> {
-  const { data } = await axiosInstance.get<Reserva[]>('/reservas');
+  const { data } = await axiosInstance.get<Reserva[]>('/api/reservas');
   return data;
 }

@@ -8,7 +8,13 @@ export interface CreateServicioReq {
   categoria: string;
 }
 
-export async function addServicio(proveedorId: number, body: CreateServicioReq): Promise<Servicio> {
-  const { data } = await axiosInstance.post<Servicio>(`/proveedores/${proveedorId}/servicios`, body);
+export async function addServicio(
+  proveedorId: number,
+  body: CreateServicioReq,
+): Promise<Servicio> {
+  const { data } = await axiosInstance.post<Servicio>(
+    `/api/proveedores/${proveedorId}/servicios`,
+    body,
+  );
   return data;
 }

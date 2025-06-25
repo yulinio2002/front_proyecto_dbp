@@ -18,11 +18,13 @@ export interface CreateResenaReq {
 }
 
 export async function createResena(body: CreateResenaReq): Promise<Resena> {
-  const { data } = await axiosInstance.post<Resena>('/resenas', body);
+  const { data } = await axiosInstance.post<Resena>('/api/resenas', body);
   return data;
 }
 
 export async function getResenas(servicioId: number): Promise<Resena[]> {
-  const { data } = await axiosInstance.get<Resena[]>(`/servicios/${servicioId}/resenas`);
+  const { data } = await axiosInstance.get<Resena[]>(
+    `/api/servicios/${servicioId}/resenas`,
+  );
   return data;
 }
