@@ -4,7 +4,7 @@ export interface Reserva {
   id: number;
   fechaReserva: string;
   direccion: string;
-  estado: 'PENDIENTE' | 'COMPLETADA' | 'CANCELADA';
+  estado: 'PENDIENTE' | 'ACEPTADA' | 'COMPLETADA' | 'CANCELADA';
   clienteId: number;
   servicioId: number;
 }

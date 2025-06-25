@@ -5,14 +5,18 @@ import { clearAuth, saveAuth } from '../utils/authHelpers';
 import * as authSvc from '../services/auth';
 
 export interface AuthState {
-  userId: number;
+  id: number;
   token: string;
   role: 'CLIENTE' | 'PROVEEDOR';
 }
 
 export interface AuthContextType extends Partial<AuthState> {
   login: (c: { email: string; password: string }) => Promise<void>;
-  register: (d: { name: string; email: string; password: string; role: AuthState['role'] }) => Promise<void>;
+  register: (
+    d:
+      | (import('../interfaces/auth/RegisterClienteRequest').RegisterClienteRequest & { role: 'CLIENTE' })
+      | (import('../interfaces/auth/RegisterProveedorRequest').RegisterProveedorRequest & { role: 'PROVEEDOR' })
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -34,12 +38,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await authSvc.login(cred);
     setAuth(data);
     saveAuth(data);
+    navigate(data.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
   }
 
-  async function register(data: { name: string; email: string; password: string; role: AuthState['role'] }) {
-    const resp = data.role === 'CLIENTE' ? await authSvc.registerCliente(data) : await authSvc.registerProveedor(data);
+  async function register(
+    data:
+      | (import('../interfaces/auth/RegisterClienteRequest').RegisterClienteRequest & { role: 'CLIENTE' })
+      | (import('../interfaces/auth/RegisterProveedorRequest').RegisterProveedorRequest & { role: 'PROVEEDOR' })
+  ) {
+    const resp =
+      data.role === 'CLIENTE'
+        ? await authSvc.registerCliente(data)
+        : await authSvc.registerProveedor(data);
     setAuth(resp);
     saveAuth(resp);
+    navigate(resp.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
   }
 
   function logout() {
@@ -51,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   externalLogout = logout;
 
   const value: AuthContextType = {
-    userId: auth?.userId,
+    id: auth?.id,
     token: auth?.token,
     role: auth?.role,
     login,

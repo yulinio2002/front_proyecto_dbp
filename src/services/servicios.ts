@@ -22,7 +22,7 @@ export interface SearchParams {
 }
 
 export interface HorarioReq {
-  dia: string;
+  diaSemana: string;
   horaInicio: string;
   horaFin: string;
 }

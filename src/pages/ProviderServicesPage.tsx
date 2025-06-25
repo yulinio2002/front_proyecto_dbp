@@ -4,12 +4,12 @@ import ServiceCard from '../components/ServiceCard';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function ProviderServicesPage() {
-  const { userId } = useAuth();
+  const { id } = useAuth();
   const [list, setList] = useState<Servicio[]>([]);
 
   useEffect(() => {
-    searchServicios({ proveedorId: userId }).then(setList);
-  }, [userId]);
+    searchServicios({ proveedorId: id }).then(setList);
+  }, [id]);
 
   return (
     <div className="p-4 space-y-2">

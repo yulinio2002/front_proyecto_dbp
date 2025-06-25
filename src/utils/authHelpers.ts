@@ -8,7 +8,7 @@ export function getAuthToken(): string | null {
   }
 }
 
-export function saveAuth(data: { userId: number; token: string; role: string }) {
+export function saveAuth(data: { id: number; token: string; role: string }) {
   localStorage.setItem('auth', JSON.stringify(data));
 }
 

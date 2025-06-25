@@ -1,5 +1,5 @@
 export interface AuthResponse {
-  userId: number;
+  id: number;
   token: string;
   role: 'CLIENTE' | 'PROVEEDOR';
 }

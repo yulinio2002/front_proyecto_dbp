@@ -35,7 +35,6 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute allowedRoles={['PROVEEDOR']} />,
         children: proveedorRoutes,
       },
-      { path: '/reservas', element: <ProtectedRoute allowedRoles={['PROVEEDOR']} /> },
       { path: '/admin/reservas', element: <AllReservationsPage /> },
       { path: '/servicios/:servicioId/resenas', element: <ServiceReviewsPage /> },
     ],

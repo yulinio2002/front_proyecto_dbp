@@ -14,6 +14,7 @@ export interface CreateResenaReq {
   clienteId: number;
   calificacion: number;
   comentario: string;
+  fecha: string;
 }
 
 export async function createResena(body: CreateResenaReq): Promise<Resena> {
