@@ -4,7 +4,7 @@ import { externalLogout } from '../contexts/AuthContext';
 import { NavigateFunction } from 'react-router-dom';
 
 export const axiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:8081',
   headers: { 'Content-Type': 'application/json' },
 });
 

@@ -8,7 +8,9 @@ export default function ClientReservationsPage() {
   const [list, setList] = useState<Reserva[]>([]);
 
   useEffect(() => {
-    getClienteReservas(id).then(setList);
+    if (id) {
+      getClienteReservas(id).then(setList);
+    }
   }, [id]);
 
   return (
