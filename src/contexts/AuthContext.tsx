@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { router } from '../router/routes';
 import { useStorageState } from '../hooks/useStorageState';
 import { clearAuth, saveAuth } from '../utils/authHelpers';
 import * as authSvc from '../services/auth';
@@ -31,14 +31,13 @@ export function useAuth() {
 export let externalLogout = () => {};
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
   const [auth, setAuth] = useStorageState<AuthState | null>('auth', null);
 
   async function login(cred: { email: string; password: string }) {
     const data = await authSvc.login(cred);
     setAuth(data);
     saveAuth(data);
-    navigate(data.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
+    router.navigate(data.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
   }
 
   async function register(
@@ -52,13 +51,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         : await authSvc.registerProveedor(data);
     setAuth(resp);
     saveAuth(resp);
-    navigate(resp.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
+    router.navigate(resp.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
   }
 
   function logout() {
     clearAuth();
     setAuth(null);
-    navigate('/login');
+    router.navigate('/login');
   }
 
   externalLogout = logout;
