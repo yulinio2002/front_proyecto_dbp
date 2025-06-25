@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouteObject } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom';
 import App from '../App';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
@@ -27,6 +27,7 @@ export const router = createBrowserRouter([
   {
     element: <App />,
     children: [
+      { index: true, element: <Navigate to="/login" replace /> },
       {
         element: <ProtectedRoute allowedRoles={['CLIENTE']} />,
         children: clienteRoutes,
