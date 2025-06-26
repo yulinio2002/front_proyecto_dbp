@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { router } from '../router/routes';
 import { useStorageState } from '../hooks/useStorageState';
 import { clearAuth, saveAuth } from '../utils/authHelpers';
@@ -33,11 +34,17 @@ export let externalLogout = () => {};
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useStorageState<AuthState | null>('auth', null);
 
+  interface JwtPayload {
+    role: 'CLIENTE' | 'PROVEEDOR';
+  }
+
   async function login(cred: { email: string; password: string }) {
-    const data = await authSvc.login(cred);
-    setAuth(data);
-    saveAuth(data);
-    router.navigate(data.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
+    const resp = await authSvc.login(cred);
+    const { role } = jwtDecode<JwtPayload>(resp.token);
+    const authData = { userId: resp.id, token: resp.token, role } as AuthState;
+    setAuth(authData);
+    saveAuth(authData);
+    router.navigate(role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
   }
 
   async function register(
@@ -49,9 +56,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data.role === 'CLIENTE'
         ? await authSvc.registerCliente(data)
         : await authSvc.registerProveedor(data);
-    setAuth(resp);
-    saveAuth(resp);
-    router.navigate(resp.role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
+    const role = resp.role ?? jwtDecode<JwtPayload>(resp.token).role;
+    const authData = { userId: resp.id, token: resp.token, role } as AuthState;
+    setAuth(authData);
+    saveAuth(authData);
+    router.navigate(role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
   }
 
   function logout() {
