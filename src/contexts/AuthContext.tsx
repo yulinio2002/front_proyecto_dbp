@@ -9,6 +9,7 @@ export interface AuthState {
   userId: number;
   token: string;
   role: 'CLIENTE' | 'PROVEEDOR';
+  username: string;
 }
 
 export interface AuthContextType extends Partial<AuthState> {
@@ -36,13 +37,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   interface JwtPayload {
     roles?: Array<'ROLE_CLIENTE' | 'ROLE_PROVEEDOR'>;
+    sub?: string;
+    nombre?: string;
   }
 
   async function login(cred: { email: string; password: string }) {
     const resp = await authSvc.login(cred);
     const decoded = jwtDecode<JwtPayload>(resp.token);
     const role = decoded.roles?.[0] === 'ROLE_PROVEEDOR' ? 'PROVEEDOR' : 'CLIENTE';
-    const authData = { userId: resp.id, token: resp.token, role } as AuthState;
+    const username = decoded.nombre ?? decoded.sub ?? '';
+    const authData = { userId: resp.id, token: resp.token, role, username } as AuthState;
     setAuth(authData);
     saveAuth(authData);
     router.navigate(role === 'CLIENTE' ? '/cliente/dashboard' : '/proveedor/dashboard');
@@ -63,7 +67,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       : decoded?.roles?.[0] === 'ROLE_PROVEEDOR'
         ? 'PROVEEDOR'
         : 'CLIENTE';
-    const authData = { userId: resp.id, token: resp.token, role } as AuthState;
+    const username = decoded?.nombre ?? decoded?.sub ?? '';
+    const authData = {
+      userId: resp.id,
+      token: resp.token,
+      role,
+      username,
+    } as AuthState;
     setAuth(authData);
     saveAuth(authData);
     router.navigate(role === 'CLIENTE' ? '/cliente/dashboard' : '/proveedor/dashboard');
@@ -81,6 +91,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     userId: auth?.userId,
     token: auth?.token,
     role: auth?.role,
+    username: auth?.username,
     login,
     register,
     logout,

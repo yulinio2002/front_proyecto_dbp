@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getProveedorReservas, Reserva } from '../services/reservas';
+import {
+  getProveedorReservas,
+  Reserva,
+  acceptReserva,
+  completeReserva,
+} from '../services/reservas';
 import { useAuth } from '../contexts/AuthContext';
 import ReservationCard from '../components/ReservationCard';
 
@@ -16,7 +21,33 @@ export default function ProviderReservationsPage() {
   return (
     <div className="p-4 space-y-2">
       {list.map(r => (
-        <ReservationCard key={r.id} reserva={r} />
+        <div key={r.id} className="space-y-2">
+          <ReservationCard reserva={r} />
+          <div className="flex gap-2">
+            {r.estado === 'PENDIENTE' && (
+              <button
+                onClick={async () => {
+                  const updated = await acceptReserva(r.id);
+                  setList(list.map(it => (it.id === r.id ? updated : it)));
+                }}
+                className="text-blue-600 underline"
+              >
+                Aceptar
+              </button>
+            )}
+            {r.estado === 'ACEPTADA' && (
+              <button
+                onClick={async () => {
+                  const updated = await completeReserva(r.id);
+                  setList(list.map(it => (it.id === r.id ? updated : it)));
+                }}
+                className="text-blue-600 underline"
+              >
+                Completar
+              </button>
+            )}
+          </div>
+        </div>
       ))}
     </div>
   );

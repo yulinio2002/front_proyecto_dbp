@@ -2,12 +2,13 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Navbar() {
-  const { role, logout } = useAuth();
+  const { role, username, logout } = useAuth();
 
   return (
     <nav className="bg-gray-800 text-white p-4 flex justify-between">
       <div className="font-bold">Servicios</div>
-      <div className="space-x-4">
+      <div className="space-x-4 flex items-center">
+        {username && <span className="mr-4">{username}</span>}
         {role === 'CLIENTE' && (
           <>
             <Link to="/cliente/dashboard" className="hover:underline">

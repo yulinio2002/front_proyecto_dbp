@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getClienteReservas, Reserva } from '../services/reservas';
+import {
+  getClienteReservas,
+  Reserva,
+  cancelReserva,
+} from '../services/reservas';
 import { useAuth } from '../contexts/AuthContext';
 import ReservationCard from '../components/ReservationCard';
 
@@ -16,7 +20,21 @@ export default function ClientReservationsPage() {
   return (
     <div className="p-4 space-y-2">
       {list.map(r => (
-        <ReservationCard key={r.id} reserva={r} />
+        <div key={r.id} className="space-y-2">
+          <ReservationCard reserva={r} />
+          {r.estado !== 'CANCELADA' && r.estado !== 'COMPLETADA' && (
+            <button
+              onClick={async () => {
+                if (!userId) return;
+                const updated = await cancelReserva(userId, r.id);
+                setList(list.map(it => (it.id === r.id ? updated : it)));
+              }}
+              className="text-blue-600 underline"
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
       ))}
     </div>
   );
