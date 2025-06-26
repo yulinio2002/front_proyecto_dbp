@@ -1,12 +1,7 @@
 import { axiosInstance } from './axiosInstance';
 import type { RegisterClienteRequest } from '../interfaces/auth/RegisterClienteRequest';
 import type { RegisterProveedorRequest } from '../interfaces/auth/RegisterProveedorRequest';
-
-export interface AuthResponse {
-  id: number;
-  token: string;
-  role: 'CLIENTE' | 'PROVEEDOR';
-}
+import type { AuthResponse } from '../interfaces/auth/AuthResponse';
 
 export interface LoginReq {
   email: string;

@@ -8,7 +8,7 @@ import Button from '../components/Button';
 
 export default function ServiceReviewsPage() {
   const { servicioId } = useParams();
-  const { id } = useAuth();
+  const { userId } = useAuth();
   const [list, setList] = useState<Resena[]>([]);
   const [comentario, setComentario] = useState('');
   const [calificacion, setCalificacion] = useState(5);
@@ -19,10 +19,10 @@ export default function ServiceReviewsPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!servicioId || !id) return;
+    if (!servicioId || !userId) return;
     const res = await createResena({
       servicioId: Number(servicioId),
-      clienteId: id,
+      clienteId: userId,
       comentario,
       calificacion,
       fecha: new Date().toISOString(),

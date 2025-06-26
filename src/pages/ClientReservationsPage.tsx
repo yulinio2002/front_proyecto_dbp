@@ -4,14 +4,14 @@ import { useAuth } from '../contexts/AuthContext';
 import ReservationCard from '../components/ReservationCard';
 
 export default function ClientReservationsPage() {
-  const { id } = useAuth();
+  const { userId } = useAuth();
   const [list, setList] = useState<Reserva[]>([]);
 
   useEffect(() => {
-    if (id) {
-      getClienteReservas(id).then(setList);
+    if (userId) {
+      getClienteReservas(userId).then(setList);
     }
-  }, [id]);
+  }, [userId]);
 
   return (
     <div className="p-4 space-y-2">

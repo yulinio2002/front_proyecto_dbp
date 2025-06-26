@@ -5,7 +5,7 @@ import { clearAuth, saveAuth } from '../utils/authHelpers';
 import * as authSvc from '../services/auth';
 
 export interface AuthState {
-  id: number;
+  userId: number;
   token: string;
   role: 'CLIENTE' | 'PROVEEDOR';
 }
@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   externalLogout = logout;
 
   const value: AuthContextType = {
-    id: auth?.id,
+    userId: auth?.userId,
     token: auth?.token,
     role: auth?.role,
     login,
