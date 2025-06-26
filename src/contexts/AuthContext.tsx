@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const authData = { userId: resp.id, token: resp.token, role } as AuthState;
     setAuth(authData);
     saveAuth(authData);
-    router.navigate(role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
+    router.navigate(role === 'CLIENTE' ? '/cliente/dashboard' : '/proveedor/dashboard');
   }
 
   async function register(
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const authData = { userId: resp.id, token: resp.token, role } as AuthState;
     setAuth(authData);
     saveAuth(authData);
-    router.navigate(role === 'CLIENTE' ? '/cliente/servicios' : '/proveedor/servicios');
+    router.navigate(role === 'CLIENTE' ? '/cliente/dashboard' : '/proveedor/dashboard');
   }
 
   function logout() {
