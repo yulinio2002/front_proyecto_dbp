@@ -29,11 +29,11 @@ export default function Navbar() {
         )}
         {role === 'PROVEEDOR' && (
           <>
+            <Link to="/proveedor/dashboard" className="hover:underline">
+              Inicio
+            </Link>
             <Link to="/proveedor/reservas" className="hover:underline">
               Mis reservas
-            </Link>
-            <Link to="/proveedor/servicios" className="hover:underline">
-              Mis servicios
             </Link>
           </>
         )}

@@ -16,6 +16,11 @@ export default function ProviderDashboardPage() {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Panel del Proveedor</h1>
+      <div>
+        <Link to="/proveedor/servicios/nuevo" className="text-blue-600 underline">
+          Agregar Servicio
+        </Link>
+      </div>
       <table className="min-w-full text-left border divide-y">
         <thead className="bg-gray-100">
           <tr>
