@@ -1,10 +1,13 @@
 import { AuthProvider } from "@contexts/AuthContext";
 import { router } from "@router/routes";
+import { attachInterceptors } from "@services/axiosInstance";
 import "@styles/App.css";
 import "@styles/index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+
+attachInterceptors(router.navigate);
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
