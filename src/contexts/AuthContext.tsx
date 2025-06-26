@@ -35,12 +35,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [auth, setAuth] = useStorageState<AuthState | null>('auth', null);
 
   interface JwtPayload {
-    role: 'CLIENTE' | 'PROVEEDOR';
+    roles?: Array<'ROLE_CLIENTE' | 'ROLE_PROVEEDOR'>;
   }
 
   async function login(cred: { email: string; password: string }) {
     const resp = await authSvc.login(cred);
-    const { role } = jwtDecode<JwtPayload>(resp.token);
+    const decoded = jwtDecode<JwtPayload>(resp.token);
+    const role = decoded.roles?.[0] === 'ROLE_PROVEEDOR' ? 'PROVEEDOR' : 'CLIENTE';
     const authData = { userId: resp.id, token: resp.token, role } as AuthState;
     setAuth(authData);
     saveAuth(authData);
@@ -56,7 +57,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       data.role === 'CLIENTE'
         ? await authSvc.registerCliente(data)
         : await authSvc.registerProveedor(data);
-    const role = resp.role ?? jwtDecode<JwtPayload>(resp.token).role;
+    const decoded = resp.role ? undefined : jwtDecode<JwtPayload>(resp.token);
+    const role = resp.role
+      ? resp.role
+      : decoded?.roles?.[0] === 'ROLE_PROVEEDOR'
+        ? 'PROVEEDOR'
+        : 'CLIENTE';
     const authData = { userId: resp.id, token: resp.token, role } as AuthState;
     setAuth(authData);
     saveAuth(authData);
