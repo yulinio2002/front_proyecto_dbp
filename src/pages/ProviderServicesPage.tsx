@@ -28,6 +28,7 @@ export default function ProviderServicesPage() {
           <div className="flex gap-2">
             <Link
               to={`/proveedor/servicios/${s.id}/editar`}
+              state={s}
               className="text-blue-600 underline"
             >
               Editar

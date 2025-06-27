@@ -1,11 +1,15 @@
 import { FormEvent, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { updateServicio, getServicio } from '../services/servicios';
+import { useParams, useLocation } from 'react-router-dom';
+import { updateServicio, searchServicios, Servicio } from '../services/servicios';
+import { useAuth } from '../contexts/AuthContext';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
 export default function EditServicePage() {
   const { servicioId } = useParams();
+  const location = useLocation();
+  const { userId } = useAuth();
+
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
@@ -14,14 +18,32 @@ export default function EditServicePage() {
 
   useEffect(() => {
     if (!servicioId) return;
-    getServicio(Number(servicioId)).then(s => {
-      setNombre(s.nombre);
-      setDescripcion(s.descripcion);
-      setPrecio(String(s.precio));
-      setCategoria(s.categoria);
+
+    const state = location.state as Servicio | undefined;
+    if (state) {
+      setNombre(state.nombre);
+      setDescripcion(state.descripcion);
+      setPrecio(String(state.precio));
+      setCategoria(state.categoria);
       setLoading(false);
-    });
-  }, [servicioId]);
+      return;
+    }
+
+    if (userId) {
+      searchServicios({ proveedorId: userId }).then(list => {
+        const service = list.find(s => s.id === Number(servicioId));
+        if (service) {
+          setNombre(service.nombre);
+          setDescripcion(service.descripcion);
+          setPrecio(String(service.precio));
+          setCategoria(service.categoria);
+        }
+        setLoading(false);
+      });
+    } else {
+      setLoading(false);
+    }
+  }, [servicioId, location.state, userId]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
