@@ -27,6 +27,11 @@ export interface HorarioReq {
   horaFin: string;
 }
 
+export async function getServicio(id: number): Promise<Servicio> {
+  const { data } = await axiosInstance.get<Servicio>(`/api/servicios/${id}`);
+  return data;
+}
+
 export async function searchServicios(p: SearchParams): Promise<Servicio[]> {
   const { data } = await axiosInstance.get<Servicio[]>('/api/servicios', {
     params: p,

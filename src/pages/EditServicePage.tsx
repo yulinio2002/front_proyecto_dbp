@@ -1,6 +1,6 @@
 import { FormEvent, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { updateServicio, Servicio } from '../services/servicios';
+import { updateServicio, getServicio, Servicio } from '../services/servicios';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
@@ -8,7 +8,10 @@ export default function EditServicePage() {
   const { servicioId } = useParams();
   const [data, setData] = useState<Partial<Servicio>>({});
 
-  useEffect(() => {}, [servicioId]);
+  useEffect(() => {
+    if (!servicioId) return;
+    getServicio(Number(servicioId)).then(setData);
+  }, [servicioId]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
