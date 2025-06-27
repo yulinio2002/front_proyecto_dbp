@@ -1,11 +1,12 @@
 import { FormEvent, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { setHorarios, HorarioReq } from '../services/servicios';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
 export default function ServiceSchedulePage() {
   const { servicioId } = useParams();
+  const navigate = useNavigate();
   const [horarios, setData] = useState<HorarioReq[]>([{ diaSemana: '', horaInicio: '', horaFin: '' }]);
 
   function handleChange(index: number, field: keyof HorarioReq, value: string) {
@@ -16,6 +17,7 @@ export default function ServiceSchedulePage() {
     e.preventDefault();
     if (!servicioId) return;
     await setHorarios(Number(servicioId), horarios);
+    navigate('/proveedor/dashboard');
   }
 
   return (

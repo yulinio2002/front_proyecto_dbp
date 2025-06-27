@@ -31,14 +31,33 @@ export default function ServiceReviewsPage() {
     setComentario('');
   }
 
+  const avg =
+    list.length > 0
+      ? (
+          list.reduce((sum, r) => sum + r.calificacion, 0) / list.length
+        ).toFixed(1)
+      : 'No hay calificaciones';
+
   return (
-    <div className="p-4 space-y-2">
-      {list.map(r => (
-        <ReviewCard key={r.id} resena={r} />
-      ))}
+    <div className="p-4 space-y-4">
+      <h2 className="text-xl font-semibold">Calificación promedio: {avg}</h2>
+      <div className="space-y-2">
+        {list.map(r => (
+          <ReviewCard key={r.id} resena={r} />
+        ))}
+      </div>
       <form onSubmit={handleSubmit} className="space-y-2">
-        <Input label="Comentario" value={comentario} onChange={e => setComentario(e.target.value)} />
-        <Input label="Calificación" type="number" value={calificacion} onChange={e => setCalificacion(Number(e.target.value))} />
+        <Input
+          label="Comentario"
+          value={comentario}
+          onChange={e => setComentario(e.target.value)}
+        />
+        <Input
+          label="Calificación"
+          type="number"
+          value={calificacion}
+          onChange={e => setCalificacion(Number(e.target.value))}
+        />
         <Button type="submit">Enviar</Button>
       </form>
     </div>

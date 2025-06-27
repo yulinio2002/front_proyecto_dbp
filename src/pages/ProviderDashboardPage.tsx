@@ -27,6 +27,7 @@ export default function ProviderDashboardPage() {
             <th className="p-2">Nombre</th>
             <th className="p-2">Descripción</th>
             <th className="p-2">Precio</th>
+            <th className="p-2">Horarios</th>
             <th className="p-2">Acciones</th>
           </tr>
         </thead>
@@ -36,18 +37,20 @@ export default function ProviderDashboardPage() {
               <td className="p-2">{s.nombre}</td>
               <td className="p-2">{s.descripcion}</td>
               <td className="p-2">${s.precio}</td>
+              <td className="p-2">
+                <Link
+                  to={`/proveedor/servicios/${s.id}/horarios`}
+                  className="text-blue-600 underline"
+                >
+                  Ver
+                </Link>
+              </td>
               <td className="p-2 space-x-2">
                 <Link
                   to={`/proveedor/servicios/${s.id}/editar`}
                   className="text-blue-600 underline"
                 >
                   Editar
-                </Link>
-                <Link
-                  to={`/proveedor/servicios/${s.id}/horarios`}
-                  className="text-blue-600 underline"
-                >
-                  Horario
                 </Link>
                 <Link
                   to={`/servicios/${s.id}/resenas`}
