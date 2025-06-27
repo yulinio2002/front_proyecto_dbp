@@ -27,6 +27,8 @@ export interface HorarioReq {
   horaFin: string;
 }
 
+export type Horario = HorarioReq;
+
 export async function getServicio(id: number): Promise<Servicio> {
   const { data } = await axiosInstance.get<Servicio>(`/api/servicios/${id}`);
   return data;
@@ -52,4 +54,11 @@ export async function setHorarios(
   horarios: HorarioReq[],
 ): Promise<void> {
   await axiosInstance.post(`/api/servicios/${servicioId}/horarios`, horarios);
+}
+
+export async function getHorarios(servicioId: number): Promise<Horario[]> {
+  const { data } = await axiosInstance.get<Horario[]>(
+    `/api/servicios/${servicioId}/horarios`,
+  );
+  return data;
 }
