@@ -7,23 +7,34 @@ import {
   getHorarios,
   Horario,
 } from '../services/servicios';
+import { getResenas } from '../services/resenas';
 
 export default function ProviderDashboardPage() {
   const { userId } = useAuth();
   const [list, setList] = useState<Servicio[]>([]);
   const [horarios, setHorarios] = useState<Record<number, Horario[]>>({});
+  const [ratings, setRatings] = useState<Record<number, number>>({});
 
   useEffect(() => {
     if (userId) {
       searchServicios({ proveedorId: userId }).then(async servicios => {
         setList(servicios);
-        const map: Record<number, Horario[]> = {};
+        const horariosMap: Record<number, Horario[]> = {};
+        const ratingMap: Record<number, number> = {};
         await Promise.all(
           servicios.map(async s => {
-            map[s.id] = await getHorarios(s.id);
+            horariosMap[s.id] = await getHorarios(s.id);
+            const resenas = await getResenas(s.id);
+            if (resenas.length > 0) {
+              const avg =
+                resenas.reduce((sum, r) => sum + r.calificacion, 0) /
+                resenas.length;
+              ratingMap[s.id] = avg;
+            }
           }),
         );
-        setHorarios(map);
+        setHorarios(horariosMap);
+        setRatings(ratingMap);
       });
     }
   }, [userId]);
@@ -42,6 +53,7 @@ export default function ProviderDashboardPage() {
             <th className="p-2">Nombre</th>
             <th className="p-2">Descripción</th>
             <th className="p-2">Precio</th>
+            <th className="p-2">Calificación</th>
             <th className="p-2">Horarios</th>
             <th className="p-2">Acciones</th>
           </tr>
@@ -52,6 +64,11 @@ export default function ProviderDashboardPage() {
               <td className="p-2">{s.nombre}</td>
               <td className="p-2">{s.descripcion}</td>
               <td className="p-2">${s.precio}</td>
+              <td className="p-2">
+                {ratings[s.id] !== undefined
+                  ? ratings[s.id].toFixed(1)
+                  : 'Sin reseñas'}
+              </td>
               <td className="p-2">
                 {horarios[s.id]
                   ? horarios[s.id]
@@ -78,7 +95,7 @@ export default function ProviderDashboardPage() {
                   to={`/servicios/${s.id}/resenas`}
                   className="text-blue-600 underline"
                 >
-                  Reseñas
+                  Ver reseñas
                 </Link>
               </td>
             </tr>
