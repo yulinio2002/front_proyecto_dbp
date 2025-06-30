@@ -10,6 +10,7 @@ export default function CreateServicePage() {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [categoria, setCategoria] = useState('');
+  const [activo, setActivo] = useState(true);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -19,6 +20,7 @@ export default function CreateServicePage() {
       descripcion,
       precio: Number(precio),
       categoria,
+      activo,
     });
     setNombre('');
     setDescripcion('');
@@ -32,6 +34,14 @@ export default function CreateServicePage() {
       <Input label="Descripción" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
       <Input label="Precio" value={precio} onChange={e => setPrecio(e.target.value)} />
       <Input label="Categoría" value={categoria} onChange={e => setCategoria(e.target.value)} />
+      <label className="flex gap-2 items-center">
+        <span>Activo</span>
+        <input
+          type="checkbox"
+          checked={activo}
+          onChange={e => setActivo(e.target.checked)}
+        />
+      </label>
       <Button type="submit">Crear</Button>
     </form>
   );

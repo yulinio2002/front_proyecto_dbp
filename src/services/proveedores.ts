@@ -6,6 +6,7 @@ export interface CreateServicioReq {
   descripcion: string;
   precio: number;
   categoria: string;
+  activo: boolean;
 }
 
 export async function addServicio(
@@ -15,6 +16,15 @@ export async function addServicio(
   const { data } = await axiosInstance.post<Servicio>(
     `/api/proveedores/${proveedorId}/servicios`,
     body,
+  );
+  return data;
+}
+
+export async function getServiciosProveedor(
+  proveedorId: number,
+): Promise<Servicio[]> {
+  const { data } = await axiosInstance.get<Servicio[]>(
+    `/api/servicios/${proveedorId}/servicios`,
   );
   return data;
 }

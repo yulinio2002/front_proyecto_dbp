@@ -8,6 +8,7 @@ export interface Servicio {
   precio: number;
   categoria: string;
   proveedorId: number;
+  activo: boolean;
 }
 
 export interface SearchParams {
@@ -47,6 +48,17 @@ export async function updateServicio(
 ): Promise<Servicio> {
   const { data } = await axiosInstance.put<Servicio>(`/api/servicios/${id}`, body);
   return data;
+}
+
+export async function changeEstado(
+  servicioId: number,
+  activo: boolean,
+): Promise<void> {
+  await axiosInstance.patch(
+    `/api/servicios/${servicioId}/estado`,
+    {},
+    { params: { activo } },
+  );
 }
 
 export async function setHorarios(

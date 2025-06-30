@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { searchServicios, Servicio } from '../services/servicios';
+import { Servicio } from '../services/servicios';
+import { getServiciosProveedor } from '../services/proveedores';
 import ServiceCard from '../components/ServiceCard';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -9,7 +10,9 @@ export default function ProviderServicesPage() {
   const [list, setList] = useState<Servicio[]>([]);
 
   useEffect(() => {
-    searchServicios({ proveedorId: userId }).then(setList);
+    if (userId) {
+      getServiciosProveedor(userId).then(setList);
+    }
   }, [userId]);
 
   return (

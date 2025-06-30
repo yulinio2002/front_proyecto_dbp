@@ -1,6 +1,6 @@
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
-import { searchServicios } from '../services/servicios';
+import { getServiciosProveedor } from '../services/proveedores';
 import { getResenas, Resena } from '../services/resenas';
 import ReviewCard from '../components/ReviewCard';
 
@@ -11,7 +11,7 @@ export default function ProviderReviewsPage() {
   useEffect(() => {
     async function load() {
       if (!userId) return;
-      const servicios = await searchServicios({ proveedorId: userId });
+      const servicios = await getServiciosProveedor(userId);
       const all: Resena[] = [];
       for (const s of servicios) {
         const r = await getResenas(s.id);

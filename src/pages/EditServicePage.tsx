@@ -1,6 +1,7 @@
 import { FormEvent, useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { updateServicio, searchServicios, Servicio } from '../services/servicios';
+import { updateServicio, Servicio } from '../services/servicios';
+import { getServiciosProveedor } from '../services/proveedores';
 import { useAuth } from '../contexts/AuthContext';
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -14,6 +15,7 @@ export default function EditServicePage() {
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
   const [categoria, setCategoria] = useState('');
+  const [activo, setActivo] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,18 +27,20 @@ export default function EditServicePage() {
       setDescripcion(state.descripcion);
       setPrecio(String(state.precio));
       setCategoria(state.categoria);
+      setActivo(state.activo);
       setLoading(false);
       return;
     }
 
     if (userId) {
-      searchServicios({ proveedorId: userId }).then(list => {
+      getServiciosProveedor(userId).then(list => {
         const service = list.find(s => s.id === Number(servicioId));
         if (service) {
           setNombre(service.nombre);
           setDescripcion(service.descripcion);
           setPrecio(String(service.precio));
           setCategoria(service.categoria);
+          setActivo(service.activo);
         }
         setLoading(false);
       });
@@ -53,6 +57,7 @@ export default function EditServicePage() {
       descripcion,
       precio: Number(precio),
       categoria,
+      activo,
     });
   }
 
@@ -66,6 +71,14 @@ export default function EditServicePage() {
           <Input label="Descripción" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
           <Input label="Precio" value={precio} onChange={e => setPrecio(e.target.value)} />
           <Input label="Categoría" value={categoria} onChange={e => setCategoria(e.target.value)} />
+          <label className="flex gap-2 items-center">
+            <span>Activo</span>
+            <input
+              type="checkbox"
+              checked={activo}
+              onChange={e => setActivo(e.target.checked)}
+            />
+          </label>
           <Button type="submit">Guardar</Button>
         </>
       )}

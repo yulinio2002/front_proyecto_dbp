@@ -1,12 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
-import {
-  searchServicios,
-  Servicio,
-  getHorarios,
-  Horario,
-} from '../services/servicios';
+import { Servicio, getHorarios, Horario, changeEstado } from '../services/servicios';
+import { getServiciosProveedor } from '../services/proveedores';
 import { getResenas } from '../services/resenas';
 
 export default function ProviderDashboardPage() {
@@ -17,7 +13,7 @@ export default function ProviderDashboardPage() {
 
   useEffect(() => {
     if (userId) {
-      searchServicios({ proveedorId: userId }).then(async servicios => {
+      getServiciosProveedor(userId).then(async servicios => {
         setList(servicios);
         const horariosMap: Record<number, Horario[]> = {};
         const ratingMap: Record<number, number> = {};
@@ -53,6 +49,7 @@ export default function ProviderDashboardPage() {
             <th className="p-2">Nombre</th>
             <th className="p-2">Descripción</th>
             <th className="p-2">Precio</th>
+            <th className="p-2">Activo</th>
             <th className="p-2">Calificación</th>
             <th className="p-2">Horarios</th>
             <th className="p-2">Acciones</th>
@@ -64,6 +61,7 @@ export default function ProviderDashboardPage() {
               <td className="p-2">{s.nombre}</td>
               <td className="p-2">{s.descripcion}</td>
               <td className="p-2">${s.precio}</td>
+              <td className="p-2">{s.activo ? 'Sí' : 'No'}</td>
               <td className="p-2">
                 {ratings[s.id] !== undefined
                   ? ratings[s.id].toFixed(1)
@@ -97,6 +95,15 @@ export default function ProviderDashboardPage() {
                 >
                   Ver reseñas
                 </Link>
+                <button
+                  onClick={async () => {
+                    await changeEstado(s.id, !s.activo);
+                    setList(list.map(it => (it.id === s.id ? { ...it, activo: !s.activo } : it)));
+                  }}
+                  className="text-blue-600 underline"
+                >
+                  {s.activo ? 'Desactivar' : 'Activar'}
+                </button>
               </td>
             </tr>
           ))}
